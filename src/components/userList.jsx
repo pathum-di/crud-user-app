@@ -103,7 +103,7 @@ export default class userList extends Component {
                     <div className="spinner"></div>
                     :
                     userDataList && userDataList.length > 0 ?
-                        <div className="container">
+                        <div className="wrapper container">
                             <Row>
                                 {userDataList.map((user, index) =>
                                     <UserDataCard key={index}

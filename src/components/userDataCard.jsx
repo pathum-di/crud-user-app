@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Col, Modal, Form } from 'react-bootstrap';
-import { AiFillEdit, AiOutlineHeart, AiFillHeart, AiFillDelete, AiOutlineMail, AiOutlinePhone, AiOutlineGlobal } from "react-icons/ai";
+import { Button, Card, Col, Modal, Form, Row } from 'react-bootstrap';
+import { AiOutlineEdit, AiOutlineHeart, AiFillHeart, AiFillDelete, AiOutlineMail, AiOutlinePhone, AiOutlineGlobal } from "react-icons/ai";
 import CONFIG from '../configs/endPoints.json';
 
 const emailReg = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
@@ -15,7 +15,6 @@ export default class UserDataCard extends Component {
             errorList: [],
             selectedUser: {},
         }
-        this.wrapper = React.createRef();
     }
 
     handleConfirmModal = () => {
@@ -81,34 +80,49 @@ export default class UserDataCard extends Component {
 
     }
 
+    getErrorMessage = (compName) => {
+        const errObj = this.state.errorList.find(err => err.name === compName);
+        return errObj ? errObj.mesage : '';
+    }
+
     render() {
 
         const { isOpenConfirmModal, isOpenEditModal, errorList, selectedUser } = this.state;
         const { userData } = this.props;
         // console.log('state in render ', this.state);
         return (
-            <Col ref={this.wrapper} xs={12} md={3}>
-                <Card className="m-1">
+            <Col xs={12} sm={6} md={6} lg={4} xl={3}>
+                <Card className="m-2" style={{ minWidth: '280px' }}>
                     <Card.Img style={{ backgroundColor: '#f5f5f5' }} variant="top" src={`${CONFIG.avatar_url}/${userData.username}.svg?options[mood][]=happy`} />
                     <Card.Body>
                         <Card.Title>{userData.name}</Card.Title>
-                        <AiOutlineMail /><Card.Text>  &nbsp;{userData.email}</Card.Text>
-                        <AiOutlinePhone /><Card.Text>  &nbsp;{userData.phone}</Card.Text>
-                        <AiOutlineGlobal /><Card.Text>  &nbsp;{'http://' + userData.website}</Card.Text>
+                        <div style={{ dispaly: 'flex', flexDirection: 'row' }}><p><AiOutlineMail />&nbsp;{userData.email}</p></div>
+                        <div style={{ dispaly: 'flex', flexDirection: 'row' }}><p><AiOutlinePhone /> &nbsp;{userData.phone}</p></div>
+                        <div style={{ dispaly: 'flex', flexDirection: 'row' }}><p><AiOutlineGlobal />  &nbsp;{'http://' + userData.website}</p></div>
 
                     </Card.Body>
                     <Card.Footer>
-                        <Button onClick={() => { this.props.handleWishListUser(userData.id) }} className="m-1" variant="danger" size="sm">
-                            {userData.isWishlisted ? <AiFillHeart /> : <AiOutlineHeart />}
-                        </Button>
-                        <Button onClick={this.handleEditModal} className="m-1" variant="primary" size="sm">
-                            <AiFillEdit />
-                        </Button>
-                        <Button onClick={this.handleConfirmModal} className="m-1" variant="secondary" size="sm">
-                            <AiFillDelete />
-                        </Button>
+                        <Row>
+                            <Col className="border-right d-flex justify-content-center">
+                                <Button onClick={() => { this.props.handleWishListUser(userData.id) }} variant="danger" size="sm">
+                                    {userData.isWishlisted ? <AiFillHeart /> : <AiOutlineHeart />}
+                                </Button>
+                            </Col>
+                            <Col className="border-right d-flex justify-content-center">
+                                <Button onClick={this.handleEditModal} variant="primary" size="sm">
+                                    <AiOutlineEdit />
+                                </Button>
+                            </Col>
+                            <Col className="d-flex justify-content-center">
+                                <Button onClick={this.handleConfirmModal} variant="secondary" size="sm">
+                                    <AiFillDelete />
+                                </Button>
+                            </Col>
+                        </Row>
                     </Card.Footer>
                 </Card>
+
+                {/* delete model confirmation */}
 
                 {isOpenConfirmModal ?
                     <Modal
@@ -129,8 +143,7 @@ export default class UserDataCard extends Component {
                     </Modal>
                     : false}
 
-
-
+                {/* edit model */}
 
                 {isOpenEditModal ?
                     <Modal
@@ -151,7 +164,7 @@ export default class UserDataCard extends Component {
                                         <Form.Label sm="2" column>{'Name'}</Form.Label>
                                         <Col>
                                             <Form.Control isInvalid={errorList.find(err => err.name === "name")} name="name" required value={selectedUser.name} onChange={this.handleChange} size="sm" type="text" />
-                                            <Form.Control.Feedback type="invalid">{errorList.find(err => err.name === "name") ? errorList.find(err => err.name === "name").mesage : ''}</Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{this.getErrorMessage("name")}</Form.Control.Feedback>
                                         </Col>
                                     </Form.Row>
                                 </Form.Group>
@@ -160,7 +173,7 @@ export default class UserDataCard extends Component {
                                         <Form.Label sm="2" column>{'Email'}</Form.Label>
                                         <Col>
                                             <Form.Control isInvalid={errorList.find(err => err.name === "email")} onChange={this.handleChange} name="email" required value={selectedUser.email} size="sm" type="email" />
-                                            <Form.Control.Feedback type="invalid">{errorList.find(err => err.name === "email") ? errorList.find(err => err.name === "email").mesage : ''}</Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{this.getErrorMessage("email")}</Form.Control.Feedback>
                                         </Col>
                                     </Form.Row>
                                 </Form.Group>
@@ -169,7 +182,7 @@ export default class UserDataCard extends Component {
                                         <Form.Label sm="2" column>{'Phone'}</Form.Label>
                                         <Col>
                                             <Form.Control isInvalid={errorList.find(err => err.name === "phone")} onChange={this.handleChange} name="phone" required value={selectedUser.phone} size="sm" type="text" />
-                                            <Form.Control.Feedback type="invalid">{errorList.find(err => err.name === "phone") ? errorList.find(err => err.name === "phone").mesage : ''}</Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{this.getErrorMessage("phone")}</Form.Control.Feedback>
                                         </Col>
                                     </Form.Row>
                                 </Form.Group>
@@ -178,12 +191,14 @@ export default class UserDataCard extends Component {
                                         <Form.Label sm="2" column>{'Website'}</Form.Label>
                                         <Col>
                                             <Form.Control isInvalid={errorList.find(err => err.name === "website")} onChange={this.handleChange} name="website" required value={selectedUser.website} size="sm" type="text" />
-                                            <Form.Control.Feedback type="invalid">{errorList.find(err => err.name === "website") ? errorList.find(err => err.name === "website").mesage : ''}</Form.Control.Feedback>
+                                            <Form.Control.Feedback type="invalid">{this.getErrorMessage("website")}</Form.Control.Feedback>
                                         </Col>
                                     </Form.Row>
                                 </Form.Group>
-                                <Button variant="secondary" onClick={this.handleEditModal}>Cancel</Button>
-                                <Button onClick={() => { this.setState({ isOpenEditModal: false }, this.props.handleEditUser(selectedUser)) }} disabled={errorList.length > 0 ? true : false} variant="primary">OK</Button>
+                                <div style={{ display: 'flex', flexDirection: 'row', float: "right" }}>
+                                    <Button className="m-1" variant="outline-primary" onClick={this.handleEditModal} size="sm">Cancel</Button>
+                                    <Button className="m-1" onClick={() => { this.setState({ isOpenEditModal: false }, this.props.handleEditUser(selectedUser)) }} disabled={errorList.length > 0 ? true : false} variant="primary" size="sm">OK</Button>
+                                </div>
                             </Form>
                         </Modal.Body>
                     </Modal>
