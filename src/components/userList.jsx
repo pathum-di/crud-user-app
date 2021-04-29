@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Alert } from 'react-bootstrap';
+import { Row, Alert } from 'antd';
 import './spinner.css';
 import UserDataCard from './userDataCard';
 import CONFIG from '../configs/endPoints.json';
@@ -103,17 +103,15 @@ export default class userList extends Component {
                     <div className="spinner"></div>
                     :
                     userDataList && userDataList.length > 0 ?
-                        <div className="wrapper container">
-                            <Row>
-                                {userDataList.map((user, index) =>
-                                    <UserDataCard key={index}
-                                        userData={user}
-                                        handleWishListUser={this.handleWishListUser}
-                                        handleEditUser={this.handleEditUser}
-                                        handleRemoveUser={this.handleRemoveUser} />)
-                                }
-                            </Row>
-                        </div>
+                        <Row>
+                            {userDataList.map((user, index) =>
+                                <UserDataCard key={index}
+                                    userData={user}
+                                    handleWishListUser={this.handleWishListUser}
+                                    handleEditUser={this.handleEditUser}
+                                    handleRemoveUser={this.handleRemoveUser} />)
+                            }
+                        </Row>
                         :
                         <Alert variant='info'>{'No users to show'}</Alert>
                 }
