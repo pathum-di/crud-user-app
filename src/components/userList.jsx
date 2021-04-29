@@ -60,7 +60,6 @@ export default class userList extends Component {
 
     handleRemoveUser = (user) => {
 
-        // console.log("userId in parent ", user);
         const { userDataList } = this.state;
 
         userDataList.splice(userDataList.indexOf(user), 1);
@@ -70,11 +69,10 @@ export default class userList extends Component {
 
     handleWishListUser = (userId) => {
 
-        // console.log("userId in parent ", userId);
         const { userDataList } = this.state;
         let selectedUserIndex;
         let selectedUser;
-        // const selectedUser = userDataList.find(user => user.id === userId);
+
         for (let i = 0; i < userDataList.length; i++) {
             const user = userDataList[i];
 
@@ -103,7 +101,7 @@ export default class userList extends Component {
                     <div className="spinner"></div>
                     :
                     userDataList && userDataList.length > 0 ?
-                        <Row>
+                        <Row gutter={[16, 16]} align="middle">
                             {userDataList.map((user, index) =>
                                 <UserDataCard key={index}
                                     userData={user}
