@@ -25,7 +25,6 @@ export default class UserDataCard extends Component {
             errorList: [],
             selectedUser: {},
         }
-        this.wrapper = React.createRef();
     }
 
     handleConfirmModal = () => {
@@ -53,7 +52,7 @@ export default class UserDataCard extends Component {
         const { userData } = this.props;
 
         return (
-            <Col ref={this.wrapper} xs={24} sm={24} md={12} lg={8} xl={6}>
+            <Col className="gutter-row" xs={24} sm={24} md={12} lg={8} xl={6}>
                 <Card cover={
                     <img
                         alt="user-profile"

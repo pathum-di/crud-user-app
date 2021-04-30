@@ -96,12 +96,13 @@ export default class userList extends Component {
     render() {
         const { isLoading, userDataList } = this.state;
         return (
-            <>
+            <div style={{ marginTop: '10px', marginLeft: '10px' }}>
                 {isLoading ?
                     <div className="spinner"></div>
                     :
                     userDataList && userDataList.length > 0 ?
-                        <Row gutter={[16, 16]} align="middle">
+
+                        <Row gutter={[16, 16]} style={{width:'100%'}}>
                             {userDataList.map((user, index) =>
                                 <UserDataCard key={index}
                                     userData={user}
@@ -111,10 +112,10 @@ export default class userList extends Component {
                             }
                         </Row>
                         :
-                        <Alert variant='info'>{'No users to show'}</Alert>
+                        <Alert message="No users to show" type="info" />
                 }
 
-            </>
+            </div>
         )
     }
 }
